@@ -126,16 +126,38 @@
 	\item
 	\item
 	\item
-	\item 
-	Un itérateur permet de parcourir une collection d'objets élément par élément. L'implémentation des itérateurs est très générique puisque ceux-ci peuvent être utilisés de la même manière sur n'importe quel type de structure de données.\\
+	\item Un itérateur permet de parcourir une collection
+        d'objets élément par élément. L'implémentation des
+        itérateurs est très générique puisque ceux-ci peuvent
+        être utilisés de la même manière sur n'importe quel
+        type de structure de données.
 	
-	 La modification des données par l'itérateur lui-même (en faisant appel à sa méthode remove) ne posera pas de souci. Cependant, la modification concurrente de la collection par un autre thread pourrait poser problème. En effet, un élément pourrait être renvoyé deux fois ou l'itérateur pourrait sauter un élément de la liste sans le renvoyer. C'est pourquoi la classe Iterator doir lancer une ConcurrentModificationException si n'importe quel élément de la collection a été modifié ou supprimé par une autre méthode que la sienne.\cite{iter-openclass} \\
+	La modification des données par l'itérateur lui-même
+        (en faisant appel à sa méthode remove) ne posera pas
+        de souci. Cependant, la modification concurrente de
+        la collection par un autre thread pourrait poser problème.
+        En effet, un élément pourrait être renvoyé deux fois ou
+        l'itérateur pourrait sauter un élément de la liste sans
+        le renvoyer. C'est pourquoi la classe Iterator doir lancer
+        une ConcurrentModificationException si n'importe quel élément
+        de la collection a été modifié ou supprimé par une autre
+        méthode que la sienne.\cite{iter-openclass}
 	 
-	 Il est possible d'empêcher la modification de la liste en ajoutant un booléen en tant que variable globale. Lors de l'initialisation de l'itérateur, ce booléen serait mis à \lstinline{false}\lstinline{} et chaque appel à \lstinline{push}\lstinline{} ou \lstinline{pop}\lstinline{} ferait passer cette variable à \lstinline{true}\lstinline{}. Ainsi, lors de la progression de l'itérateur une vérification de la variable permettra de déterminer si la pile a été modifiée. L'implémentation aura alors une forme semblable à la suivante\footnote{Seules les lignes 3, 15, 28, 37 et 48 ont été modifiées. Le reste provient directement du code source.}.\\
+	Il est possible d'empêcher la modification de la liste en
+        ajoutant un booléen en tant que variable globale. Lors de
+        l'initialisation de l'itérateur, ce booléen serait mis à
+        \lstinline{false}\lstinline{} et chaque appel à
+        \lstinline{push}\lstinline{} ou \lstinline{pop}\lstinline{}
+        ferait passer cette variable à \lstinline{true}\lstinline{}.
+        Ainsi, lors de la progression de l'itérateur une vérification
+        de la variable permettra de déterminer si la pile a été modifiée.
+        L'implémentation aura alors une forme semblable à la
+        suivante\footnote{Seules les lignes 3, 15, 28, 37 et 48 ont
+        été modifiées. Le reste provient directement du code source.}.\\
 	 
-	 \definecolor{gray}{rgb}{0.75,0.75,0.75}
-	 \definecolor{dkgreen}{rgb}{0,0.6,0}
-	 \begin{lstlisting}[language=Java]
+	\definecolor{gray}{rgb}{0.75,0.75,0.75}
+	\definecolor{dkgreen}{rgb}{0,0.6,0}
+	\begin{lstlisting}[language=Java]
 public class Stack<Item> implements Iterable<Item> {
 	 
     private boolean modified = true;
@@ -196,21 +218,45 @@ public class Stack<Item> implements Iterable<Item> {
 	 \end{lstlisting}
 	 \vspace{0.5cm}
 	 
-	 Laisser la méthode \lstinline{remove()}\lstinline{} vide ne poserait pas de problème lors de la compilation ou l'exécution du code. Cependant, il ne faut surtout pas oublier que cette méthode est vide car si le programme utilise cette méthode, aucun élément ne sera retiré de la liste. Après une rapide recherche du code source de la classe Stack, nous avons pu remarquer que pour remédier à cela, la méthode n'est pas vide mais une UnsupportedOperationException est lancée.\\
+        Laisser la méthode \lstinline{remove()}\lstinline{} vide
+        ne poserait pas de problème lors de la compilation ou
+        l'exécution du code. Cependant, il ne faut surtout pas
+        oublier que cette méthode est vide car si le programme
+        utilise cette méthode, aucun élément ne sera retiré de
+        la liste. Après une rapide recherche du code source de
+        la classe Stack, nous avons pu remarquer que pour remédier
+        à cela, la méthode n'est pas vide mais une
+        UnsupportedOperationException est lancée.\\
 	 
-	\item
+	\item La notation tilde est définie comme étant\cite{tilde-pdf}
+        $$g(N) \sim a * f(N) \quad avec \quad \lim\limits_{N
+        \longrightarrow +\infty} \frac{g(N)}{f(N)} = a$$
 
-La notation tilde est définie comme étant\cite{tilde-pdf}  $$g(N) \sim a * f(N) \quad avec \quad \lim\limits_{N \longrightarrow +\infty} \frac{g(N)}{f(N)} = a$$
+	Comparons la notation $\sim$ aux autres notations que
+        nous avons utilisé précédemment pour mesurer la complexité
+        de fonctions :
+	$\Omega(f(N))$, $\mathcal{O}(f(N))$ et $\Theta(f(N))$. \\
+	Ces notations se différencient en deux grands types :
+        $\mathcal{O}$ et $\Omega$ nous fournissent des bornes
+        respectivement inférieure et supérieure tandis que $\sim$
+        et $\Theta$ nous donnent un ordre de grandeur quant à la
+        complexité d'exécution d'un algorithme.\\
+	Les deux notations les plus pratiques sont les notations
+        $\mathcal{O}$ et $\sim$. Cependant, alors que $\mathcal{O}$
+        nous donne simplement une borne supérieure (ce qui est utile
+        pour nous donner une idée générale de ce qui pourrait arriver
+        dans le pire des cas), $\sim$ nous permet de définir aussi une
+        borne inférieure. De plus, cette dernière conserve le coefficient
+        du terme de plus haut degré et nous trouvons donc une précision
+        plus grande pour les tableaux de très grande taille
+        (cfr. Figure~\ref{complex_tilde}).
 
-	Comparons la notation $\sim$ aux autres notations que nous avons utilisé précédemment pour mesurer la complexité de fonctions :
-	 $\Omega(f(N))$, $\mathcal{O}(f(N))$ et $\Theta(f(N))$. \\
-	Ces notations se différencient en deux grands types : $\mathcal{O}$ et $\Omega$ nous fournissent des bornes respectivement inférieure et supérieure tandis que $\sim$ et $\Theta$ nous donnent un ordre de grandeur quant à la complexité d'exécution d'un algorithme.\\
-	Les deux notations les plus pratiques sont les notations $\mathcal{O}$ et $\sim$.	Cependant, alors que $\mathcal{O}$ nous donne simplement une borne supérieure (ce qui est utile pour nous donner une idée générale de ce qui pourrait arriver dans le pire des cas), $\sim$ nous permet de définir aussi une borne inférieure. De plus, cette dernière conserve le coefficient du terme de plus haut degré et nous trouvons donc une précision plus grande pour les tableaux de très grande taille (cfr. Figure~\ref{complex_tilde}).
-\begin{figure}[h]
-	\includegraphics[width=\textwidth]{complex_tilde.jpg}
-	\caption{Comparaison de la précision des notations $\mathcal{O}$ et $\sim$ \cite{image-complex}}
-	\label{complex_tilde}
-\end{figure}	
+        \begin{figure}[h]
+	        \includegraphics[width=\textwidth]{complex_tilde.jpg}
+	        \caption{Comparaison de la précision des notations
+                $\mathcal{O}$ et $\sim$ \cite{image-complex}}
+	        \label{complex_tilde}
+        \end{figure}	
 
 	\item
 	\item
