@@ -5,11 +5,11 @@
   numbers=left,
   numberstyle=\tiny\color{gray},
   basicstyle=\textrm\small\ttfamily,
-  keywordstyle=\bfseries\color{black},
+  keywordstyle=\bfseries\color{red},
   frame=single,
   commentstyle=\color{gray}=small,
   stringstyle=\color{dkgreen},
-  %backgroundcolor=\color{gray!10},
+  %backgroundcolor=\color{gray},
   %tabsize=2,
   rulecolor=\color{black},
   %title=\lstname,
@@ -123,7 +123,42 @@
 	il faudra un temps $\mathcal{O}(\sqrt{n})$ avant
 	que ce cas ne se reproduise, le coût amorti est
 	donc en $\mathcal{O}(\sqrt{n})$.
-	\item
+	\item En Java, les lectures et écritures dans un fichier
+        se font par l'intermédiaire de flux ou \textit{stream}
+        en anglais. Le package standard pour ces opérations
+        est \lstinline{java.io}. Les classes les plus génériques
+        de package sont les classes abstraires \lstinline{InputStream}
+        et \lstinline{OutputStream}. Un niveau en dessous, on
+        trouve les classes \lstinline{FileInputStream} et
+        \lstinline{FileOutputStream}. Ces deux classes nécessitent
+        un objet de type \lstinline{File} pour connecter le flux
+        au fichier. A l'aide de ces 3 classes, on va pouvoir écrire
+        une méthode pour lire et écrire dans un fichier texte byte
+        par byte.\cite{nino}
+
+        \definecolor{gray}{rgb}{0.75,0.75,0.75}
+        \definecolor{dkgreen}{rgb}{0,0.6,0}
+        \begin{lstlisting}
+public void processFile(String fileName) throws IOException {
+        FileInputStream in = new FileInputStream(new File(fileName));
+        int b;
+        while((b = in.read()) != -1) {
+                // Process b
+        }
+        in.close();
+}
+        \end{lstlisting}
+
+        \begin{lstlisting}
+public void writeFile(String fileName, int[] data) throws IOException {
+        FileOutputStream out = new FileOutputStream(new File(fileName));
+        for(int i = 0; i < data.length; i++) {
+                out.write(data[i]);
+        }
+        out.close();
+}
+        \end{lstlisting}
+
 	\item
 	\item
 	\item Un itérateur permet de parcourir une collection
@@ -138,10 +173,10 @@
         la collection par un autre thread pourrait poser problème.
         En effet, un élément pourrait être renvoyé deux fois ou
         l'itérateur pourrait sauter un élément de la liste sans
-        le renvoyer. C'est pourquoi la classe \lstinline{Iterator} doir lancer
+        le renvoyer. C'est pourquoi la classe \lstinline{Iterator} doit lancer
         une \lstinline{ConcurrentModificationException} si n'importe quel élément
         de la collection a été modifié ou supprimé par une autre
-        méthode que la sienne.\cite{iter-openclass}
+        méthode que la sienne.\cite{java-sdz}
 	 
 	Il est possible d'empêcher la modification de la liste en
         ajoutant un booléen en tant que variable globale. Lors de
@@ -155,13 +190,10 @@
         suivante\footnote{Seules les lignes 3, 15, 28, 37 et 48 ont
         été modifiées. Le reste provient directement du code source.}.
 	 
-	\definecolor{gray}{rgb}{0.75,0.75,0.75}
-	\definecolor{dkgreen}{rgb}{0,0.6,0}
 	\begin{lstlisting}[language=Java]
 public class Stack<Item> implements Iterable<Item> {
-	 
     private boolean modified = true;
-    //Les autres variables restent inchangees
+    // Les autres variables restent inchangees
 	 
     /**
     * Add the item to the stack.
@@ -212,9 +244,8 @@ public class Stack<Item> implements Iterable<Item> {
         }
     }
     
-    //Le reste du code n'est pas modifie
-	 
-	 }
+    // Le reste du code n'est pas modifie	 
+}
 	 \end{lstlisting}
 	 \vspace{0.5cm}
 	 
@@ -229,8 +260,8 @@ public class Stack<Item> implements Iterable<Item> {
         \lstinline{UnsupportedOperationException} est lancée.
 	 
 	\item La notation tilde est définie comme étant\cite{tilde-pdf}
-        $$g(N) \sim a * f(N) \quad avec \quad \lim\limits_{N
-        \longrightarrow +\infty} \frac{g(N)}{f(N)} = a$$
+        $$g(N) \sim a \cdot f(N) \quad avec \quad \lim\limits_{N
+        \to +\infty} \frac{g(N)}{f(N)} = a$$
 
 	Comparons la notation $\sim$ aux autres notations que
         nous avons utilisé précédemment pour mesurer la complexité
@@ -248,8 +279,8 @@ public class Stack<Item> implements Iterable<Item> {
         dans le pire des cas), $\sim$ nous permet de définir aussi une
         borne inférieure. De plus, cette dernière conserve le coefficient
         du terme de plus haut degré et nous trouvons donc une précision
-        plus grande pour les tableaux de très grande taille
-        (cfr. Figure~\ref{fig:complex_tilde}).
+        plus grande pour une taille d'entrée plus grande, comme le montre
+        la figure~\ref{fig:complex_tilde}).
 
         \begin{figure}[ht]
                 \centering
